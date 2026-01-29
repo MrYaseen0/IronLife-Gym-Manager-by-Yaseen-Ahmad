@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IronLife API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: #fff;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .container {
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        h1 { color: #ef4444; }
+        h2 { margin-top: 0; color: #3b82f6; }
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        button:hover {
+            background: #dc2626;
+        }
+        .response {
+            background: #111827;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border-left: 3px solid #10b981;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .error {
+            border-left-color: #ef4444;
+        }
+        .loading {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏋️ IronLife Gym Manager - API Test Console</h1>
+    
+    <div class="container">
+        <h2>Server Status</h2>
+        <button onclick="testHealth()">Test Server Health</button>
+        <div id="health-response" class="response" style="display:none;"></div>
+    </div>
+
+    <div class="container">
+        <h2>Authentication</h2>
+        <button onclick="testLogin()">Login (admin/123456)</button>
+        <div id="login-response" class="response" style="display:none;"></div>
+    </div>
+
+    <div class="container">
+        <h2>Members</h2>
+        <button onclick="getMembers()">Get All Members</button>
+        <button onclick="addMember()">Add Test Member</button>
+        <div id="members-response" class="response" style="display:none;"></div>
+    </div>
+
+    <div class="container">
+        <h2>Dashboard</h2>
+        <button onclick="getDashboardStats()">Get Dashboard Stats</button>
+        <div id="stats-response" class="response" style="display:none;"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            try {
+                const options = {
+                    method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+                
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                const data = await response.json();
+                return { status: response.status, data };
+            } catch (err) {
+                return { status: 'ERROR', data: { error: err.message } };
+            }
+        }
+
+        async function testHealth() {
+            const div = document.getElementById('health-response');
+            div.textContent = 'Testing...';
+            div.style.display = 'block';
+            div.classList.remove('error');
+
+            const result = await apiCall('/health');
+            div.textContent = `Status: ${result.status}\n\n${JSON.stringify(result.data, null, 2)}`;
+        }
+
+        async function testLogin() {
+            const div = document.getElementById('login-response');
+            div.textContent = 'Testing login...';
+            div.style.display = 'block';
+            div.classList.remove('error');
+
+            const result = await apiCall('/login', 'POST', {
+                username: 'admin',
+                password: '123456'
+            });
+            
+            if (result.status !== 200) {
+                div.classList.add('error');
+            }
+            div.textContent = `Status: ${result.status}\n\n${JSON.stringify(result.data, null, 2)}`;
+        }
+
+        async function getMembers() {
+            const div = document.getElementById('members-response');
+            div.textContent = 'Loading members...';
+            div.style.display = 'block';
+            div.classList.remove('error');
+
+            const result = await apiCall('/members');
+            if (result.status !== 200) {
+                div.classList.add('error');
+            }
+            div.textContent = `Status: ${result.status}\n\n${JSON.stringify(result.data, null, 2)}`;
+        }
+
+        async function addMember() {
+            const div = document.getElementById('members-response');
+            div.textContent = 'Adding test member...';
+            div.style.display = 'block';
+            div.classList.remove('error');
+
+            const today = new Date().toISOString().split('T')[0];
+            const result = await apiCall('/members', 'POST', {
+                name: 'Test User ' + Date.now(),
+                phone: '9999999999',
+                plan: 'Pro',
+                amount: 2500,
+                joinDate: today,
+                gender: 'Male'
+            });
+
+            if (result.status !== 201) {
+                div.classList.add('error');
+            }
+            div.textContent = `Status: ${result.status}\n\n${JSON.stringify(result.data, null, 2)}`;
+        }
+
+        async function getDashboardStats() {
+            const div = document.getElementById('stats-response');
+            div.textContent = 'Loading dashboard stats...';
+            div.style.display = 'block';
+            div.classList.remove('error');
+
+            const result = await apiCall('/stats/dashboard');
+            if (result.status !== 200) {
+                div.classList.add('error');
+            }
+            div.textContent = `Status: ${result.status}\n\n${JSON.stringify(result.data, null, 2)}`;
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            console.log('API Test Console Ready');
+            console.log('API Base:', API_BASE);
+        });
+    </script>
+</body>
+</html>

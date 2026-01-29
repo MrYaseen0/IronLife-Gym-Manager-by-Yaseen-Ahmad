@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronLife Gym Manager</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="text-gray-300">
+
+    <!-- LOGIN SECTION (Visible Initially) -->
+    <div id="login-section" class="login-section">
+        <!-- Background Decoration -->
+        <div class="background-decoration">
+            <div class="glow-red"></div>
+            <div class="glow-blue"></div>
+        </div>
+
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <h1 class="login-title">IRON<span class="highlight">LIFE</span></h1>
+                <p class="login-subtitle">GYM MANAGEMENT SYSTEM</p>
+            </div>
+            
+            <div class="login-form">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label">Username / ID</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user input-icon"></i>
+                            <input type="text" id="login-user" class="form-input" placeholder="Enter username" value="admin">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="login-pass" class="form-input" placeholder="••••••••" value="123456">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">
+                        LOGIN TO DASHBOARD
+                    </button>
+                </form>
+
+                <p id="login-error" class="error-message">
+                    <i class="fa-solid fa-circle-exclamation"></i> <span>Invalid Username or Password</span>
+                </p>
+            </div>
+            <div class="login-footer">
+                <p>Demo Access: User: <strong>admin</strong> | Pass: <strong>123456</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP SECTION (Hidden Initially) -->
+    <div id="app-section" class="app-container hidden">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-dumbbell sidebar-icon"></i>
+                <span class="sidebar-brand">IRON<span class="highlight">LIFE</span></span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" onclick="showSection('dashboard')" class="nav-item active">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" onclick="showSection('add-member')" class="nav-item">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Add Member</span>
+                </a>
+                <a href="#" onclick="showSection('members-list')" class="nav-item">
+                    <i class="fa-solid fa-users"></i>
+                    <span>All Members</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div class="user-details">
+                        <p class="user-name">Admin User</p>
+                        <p class="user-role">Manager</p>
+                    </div>
+                </div>
+                <button onclick="handleLogout()" class="logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Mobile Header -->
+            <header class="mobile-header">
+                <span class="mobile-brand">IRON<span class="highlight">LIFE</span></span>
+                <div class="mobile-actions">
+                    <button onclick="handleLogout()" class="mobile-btn">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="mobile-btn">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="content-wrapper">
+                
+                <!-- Section: Dashboard -->
+                <div id="dashboard" class="content-section">
+                    <h2 class="section-title">Dashboard Overview</h2>
+                    
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-content">
+                                <div class="stat-text">
+                                    <p>Total Members</p>
+                                    <h3 class="stat-value" id="total-members-count">0</h3>
+                                </div>
+                                <div class="stat-icon blue">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card green">
+                            <div class="stat-content">
+                                <div class="stat-text">
+                                    <p>Active Members</p>
+                                    <h3 class="stat-value" id="active-members-count">0</h3>
+                                </div>
+                                <div class="stat-icon green">
+                                    <i class="fa-solid fa-check-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card yellow">
+                            <div class="stat-content">
+                                <div class="stat-text">
+                                    <p>Monthly Revenue</p>
+                                    <h3 class="stat-value" id="revenue-count">₹0</h3>
+                                </div>
+                                <div class="stat-icon yellow">
+                                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity Table Preview -->
+                    <div class="glass-panel">
+                        <div class="table-header">
+                            <h3 class="table-title">Recent Registrations</h3>
+                            <button onclick="showSection('members-list')" class="view-all-btn">View All</button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Plan</th>
+                                        <th>Join Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-members-body">
+                                    <!-- JS will populate this -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Add Member -->
+                <div id="add-member" class="content-section hidden">
+                    <h2 class="section-title">New Registration</h2>
+                    
+                    <div class="glass-panel form-container">
+                        <form id="add-member-form" onsubmit="handleFormSubmit(event)">
+                            <div class="form-grid two-col">
+                                
+                                <div class="form-field" style="grid-column: 1 / -1;">
+                                    <label>Full Name</label>
+                                    <input type="text" id="m-name" required placeholder="Enter member name">
+                                </div>
+
+                                <div class="form-field">
+                                    <label>Phone Number</label>
+                                    <input type="tel" id="m-phone" required placeholder="98765...">
+                                </div>
+
+                                <div class="form-field">
+                                    <label>Join Date</label>
+                                    <input type="date" id="m-date" required>
+                                </div>
+
+                                <div class="form-field">
+                                    <label>Membership Plan</label>
+                                    <select id="m-plan">
+                                        <option value="Basic">Basic (₹1000/m)</option>
+                                        <option value="Pro">Pro (₹2500/m)</option>
+                                        <option value="Elite">Elite (₹5000/m)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-field">
+                                    <label>Gender</label>
+                                    <select id="m-gender">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" onclick="showSection('dashboard')" class="btn-cancel">Cancel</button>
+                                <button type="submit" class="btn-submit">
+                                    Register Member
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Section: Member List -->
+                <div id="members-list" class="content-section hidden">
+                    <div class="table-header">
+                        <h2 class="section-title">Member Directory</h2>
+                        <input type="text" id="search-input" onkeyup="searchMembers()" placeholder="Search members..." class="search-bar">
+                    </div>
+
+                    <div class="glass-panel">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Plan</th>
+                                        <th>Join Date</th>
+                                        <th>Renewal</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="full-members-body">
+                                    <!-- JS will populate -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="no-result" class="no-result">
+                            No members found matching your search.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden">
+        <i class="fa-solid fa-check-circle"></i> <span id="toast-msg">Success</span>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

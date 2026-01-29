@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronLife - Setup Diagnostics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #111827;
+            color: #d1d5db;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ef4444;
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: #9ca3af;
+        }
+        
+        .section {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section h2 {
+            color: #3b82f6;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-left: 3px solid #10b981;
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border-left: 3px solid #ef4444;
+        }
+        
+        .status.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+            border-left: 3px solid #f59e0b;
+        }
+        
+        .status.loading {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border-left: 3px solid #3b82f6;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .icon {
+            font-size: 1.2rem;
+        }
+        
+        .info-box {
+            background: #111827;
+            border-left: 3px solid #3b82f6;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .code {
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .next-steps {
+            background: rgba(16, 185, 129, 0.05);
+            border-left: 3px solid #10b981;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .next-steps h3 {
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+        
+        .next-steps ol {
+            margin-left: 20px;
+        }
+        
+        .next-steps li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏋️ IRONLIFE</h1>
+            <p class="subtitle">Gym Management System - Setup Diagnostics</p>
+        </div>
+        
+        <div class="section">
+            <h2><span class="icon">🔌</span> Backend Connection</h2>
+            <div id="backend-status" class="status loading">
+                <span class="icon">⏳</span> Checking backend server...
+            </div>
+            <button onclick="testBackend()">Test Backend Connection</button>
+        </div>
+        
+        <div class="section">
+            <h2><span class="icon">📁</span> Files Status</h2>
+            <div id="files-status"></div>
+        </div>
+        
+        <div class="section">
+            <h2><span class="icon">🚀</span> Quick Links</h2>
+            <div class="button-group">
+                <button onclick="openMainApp()">Open Main App</button>
+                <button onclick="openAPITest()">Open API Test</button>
+                <button onclick="location.reload()">Refresh Page</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2><span class="icon">📋</span> Instructions</h2>
+            <div class="info-box">
+                <strong>Make sure the Flask backend is running:</strong>
+                <div class="code">python app.py</div>
+                
+                <strong>The backend should show:</strong>
+                <div class="code">Running on http://127.0.0.1:5000</div>
+            </div>
+            
+            <div class="next-steps">
+                <h3>✅ Setup Checklist</h3>
+                <ol>
+                    <li>✅ Backend running on port 5000</li>
+                    <li>✅ Check "Backend Connection" status above</li>
+                    <li>✅ If connected, click "Open Main App"</li>
+                    <li>✅ Login with: <strong>admin / 123456</strong></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Check backend connection
+        async function testBackend() {
+            const statusDiv = document.getElementById('backend-status');
+            statusDiv.className = 'status loading';
+            statusDiv.innerHTML = '<span class="icon">⏳</span> Connecting to backend...';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/health', {
+                    method: 'GET'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `<span class="icon">✅</span> <strong>Backend Connected!</strong> Server is running on http://localhost:5000`;
+                    
+                    // Show files status
+                    updateFilesStatus(true);
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.innerHTML = `<span class="icon">❌</span> <strong>Backend Error:</strong> Server responded with status ${response.status}`;
+                }
+            } catch (err) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `<span class="icon">❌</span> <strong>Cannot Connect:</strong> ${err.message}. Make sure Flask is running!`;
+            }
+        }
+        
+        function updateFilesStatus(backendOk) {
+            const filesDiv = document.getElementById('files-status');
+            
+            const files = [
+                { name: 'gym-manager.html', check: true },
+                { name: 'style.css', check: true },
+                { name: 'script.js', check: true },
+                { name: 'app.py', check: backendOk },
+            ];
+            
+            filesDiv.innerHTML = files.map(f => `
+                <div class="status success">
+                    <span class="icon">✅</span> ${f.name}
+                </div>
+            `).join('');
+        }
+        
+        function openMainApp() {
+            window.location.href = 'gym-manager.html';
+        }
+        
+        function openAPITest() {
+            window.location.href = 'api-test.html';
+        }
+        
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            testBackend();
+            updateFilesStatus(false);
+        });
+    </script>
+</body>
+</html>
